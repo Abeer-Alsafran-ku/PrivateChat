@@ -1,6 +1,19 @@
 import streamlit as st
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
+import time
+
+# To add stream effect to the output of the response
+def stream_response(response_text, delay=0.05):
+    placeholder = st.empty()
+    streamed_text = ""
+
+    for char in response_text:
+        streamed_text += char
+        placeholder.markdown(f"**Bot:** {streamed_text}▌")  # Typing cursor
+        time.sleep(delay)
+
+    placeholder.markdown(f"**Bot:** {streamed_text}")  # Final response
 
 @st.cache_resource
 def load_model():
